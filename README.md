@@ -17,6 +17,7 @@ Dư án được xây dựng để tối ưu hóa việc quản lý vận hành 
 - **Giao diện:** Razor Pages, JQuery.
 
 ## Hướng dẫn chạy dự án
+- **Clone dự án:** Mở `CMD` gõ lệnh `git clone https://github.com/KhoaNguyen-IT2K4/room_management.git`.
 - **Database:** Vào thư mục Database, chạy script `room_management.sql` trong SQL Server.
 - **Cấu hình:** Cập nhật chuỗi kết nối trong `appsettings.json`.
 - **Chạy:** Mở file `.sln` bằng Visual Studio và nhấn `F5`.
