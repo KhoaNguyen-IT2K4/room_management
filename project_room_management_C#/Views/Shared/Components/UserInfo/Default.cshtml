@@ -16,13 +16,10 @@
         }
         <ul>
             <li>
-                @* Giả sử bạn có ProfileController *@
                 <a asp-controller="Profile" asp-action="Index"><i class="fa-solid fa-circle-info" style="color: blue;"></i> Hồ sơ</a>
             </li>
             <li>
-                @* Laravel: route('logout') -> ASP.NET: Authenticate/Logout *@
                 <form asp-controller="Authenticate" asp-action="Logout" method="post" id="logoutForm">
-                    @* ASP.NET tự chèn AntiForgeryToken khi dùng asp-action *@
                     <button class="btnOut" type="button" onclick="confirmLogout()">
                         <i class="fa-solid fa-right-from-bracket" style="color: red;"></i> Đăng xuất
                     </button>

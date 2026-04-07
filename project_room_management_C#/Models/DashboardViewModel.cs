@@ -7,7 +7,6 @@
         public int EmptyRooms { get; set; }
         public int TotalTenants { get; set; }
 
-        // Danh sách hợp đồng và phòng trống
         public List<Contract> ExpiringContracts { get; set; } = new List<Contract>();
         public List<Room> AvailableRooms { get; set; } = new List<Room>();
     }

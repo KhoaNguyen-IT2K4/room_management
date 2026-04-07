@@ -19,7 +19,6 @@ namespace project_room_management_C_.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(string search, long? room)
         {
-            // Danh sách phòng cho bộ lọc
             ViewBag.Rooms = await _context.Rooms.ToListAsync();
 
             var query = _context.Tenants
@@ -157,7 +156,6 @@ namespace project_room_management_C_.Controllers
 
                 if (currentTenant == null) return NotFound();
 
-                // Cập nhật thông tin chung (Dùng chung cho cả 2 trường hợp)
                 currentTenant.Name = tenant.Name;
                 currentTenant.Phone = tenant.Phone;
                 currentTenant.Cccd = tenant.Cccd;
@@ -167,36 +165,31 @@ namespace project_room_management_C_.Controllers
 
                 var firstContract = currentTenant.Contracts?.FirstOrDefault();
 
-                // TRƯỜNG HỢP: ĐỔI PHÒNG
                 if (firstContract != null && firstContract.RoomId != room)
                 {
                     var newRoom = await _context.Rooms.FindAsync(room);
                     if (newRoom == null || newRoom.Status == "Đã thuê")
                     {
-                        // Thông báo lỗi và quay lại trang Edit
                         TempData["Error"] = "Phòng mới không tồn tại hoặc đã có người thuê!";
                         return RedirectToAction(nameof(Edit), new { id = id });
                     }
 
-                    // 1. Trả phòng cũ về Trống
                     if (firstContract.Room != null)
                     {
                         firstContract.Room.Status = "Trống";
                     }
 
-                    // 2. Gán phòng mới và đổi trạng thái phòng mới sang Đã thuê
                     firstContract.RoomId = room;
                     newRoom.Status = "Đã thuê";
                     firstContract.StartDay = start_day;
                 }
-                // TRƯỜNG HỢP: KHÔNG ĐỔI PHÒNG (Chỉ đổi ngày)
                 else if (firstContract != null)
                 {
                     firstContract.StartDay = start_day;
                 }
 
                 await _context.SaveChangesAsync();
-                await transaction.CommitAsync(); // QUAN TRỌNG: Phải có dòng này!
+                await transaction.CommitAsync();
 
                 TempData["Success"] = "Cập nhật thông tin thành công";
                 return RedirectToAction(nameof(Index));

@@ -10,7 +10,6 @@
 <div class="nhapPhong">
     <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
         @Html.AntiForgeryToken()
-        @* Tương đương @method('PUT') trong ASP.NET thường xử lý qua POST hoặc cấu hình Route *@
 
         <h2 style="margin-left: 30%;">Cập nhật hóa đơn</h2>
 
@@ -24,7 +23,6 @@
         </div>
         <div>
             <label>Tháng:</label>
-            @* Xử lý định dạng yyyy-MM cho input month *@
             @{
                 var monthVal = Model.Year + "-" + (Model.Month ?? 0).ToString("D2");
             }
@@ -79,7 +77,6 @@
 
 @section Scripts {
     <script>
-        // Truyền dữ liệu từ C# sang một object toàn cục để file JS dùng chung
         window.RentalConfig = {
             electricPrice: @(electricDetail?.Price ?? 0),
             waterPrice: @(waterDetail?.Price ?? 0)

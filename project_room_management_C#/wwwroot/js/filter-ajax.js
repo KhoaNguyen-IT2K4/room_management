@@ -2,14 +2,14 @@
     let timeout = null;
 
     function doFilter() {
-        let dataObj = {}; // Khởi tạo đúng tên biến
+        let dataObj = {};
 
         // Quét tất cả các ô có class ajax-filter để lấy giá trị
         $('.ajax-filter').each(function () {
             let name = $(this).attr('name');
             let val = $(this).val();
             if (name) {
-                dataObj[name] = val; // Sửa từ ddataObj thành dataObj
+                dataObj[name] = val;
             }
         });
 

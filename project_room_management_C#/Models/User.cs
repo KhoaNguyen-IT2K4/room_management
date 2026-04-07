@@ -19,7 +19,7 @@ public partial class User
     [DataType(DataType.Password)]
     public string? Password { get; set; }
 
-    [NotMapped] // Dòng này cực kỳ quan trọng: Để C# không tạo cột này trong Database
+    [NotMapped] // Không tạo cột này trong Database
     [DataType(DataType.Password)]
     [Compare("Password", ErrorMessage = "Mật khẩu xác nhận không khớp.")]
     public string? ConfirmPassword { get; set; }

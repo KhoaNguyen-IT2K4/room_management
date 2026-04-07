@@ -3,10 +3,9 @@
 
 <head>
     <script>
-        // Kiểm tra ngay khi trình duyệt vừa đọc file
         (function () {
             const status = sessionStorage.getItem('sidebar-status');
-            // Chỉ thêm class ẩn nếu người dùng ĐÃ TỪNG click ẩn trước đó
+            
             if (status === 'hidden') {
                 document.documentElement.classList.add('sidebar-is-hidden');
             }

@@ -1,6 +1,6 @@
-﻿/**
- * TẬP HỢP CÁC BIẾN CẤU HÌNH TOÀN CỤC
- * Các giá trị này sẽ được gán từ file .cshtml
+﻿/*
+ TẬP HỢP CÁC BIẾN CẤU HÌNH TOÀN CỤC
+ Các giá trị này sẽ được gán từ file .cshtml
  */
 window.AppConfig = window.AppConfig || {
     electricPrice: 0,
@@ -39,7 +39,6 @@ function confirmDelete(id) {
         cancelButtonText: 'Hủy'
     }).then((result) => {
         if (result.isConfirmed) {
-            // Chỉnh lại id form cho đúng chuẩn C# nếu cần
             document.getElementById('deleteForm-' + id).submit();
         }
     });
@@ -229,7 +228,7 @@ document.addEventListener('DOMContentLoaded', function () {
     btnToggle.addEventListener('click', function () {
         if (isMobile) {
             // Cho phép dùng transition trở lại để hiệu ứng mượt mà khi click
-            // (Vì lúc load trang ta đã dùng transition: none ở CSS phía trên)
+            // (Vì lúc load trang ta đã dùng transition: none)
             const sidebar = document.querySelector('.sidebar');
             const main = document.querySelector('.main-content');
             sidebar.style.transition = "height 0.3s ease, opacity 0.3s ease";
@@ -247,7 +246,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         else {
             // Cho phép dùng transition trở lại để hiệu ứng mượt mà khi click
-            // (Vì lúc load trang ta đã dùng transition: none ở CSS phía trên)
+            // (Vì lúc load trang ta đã dùng transition: none)
             const sidebar = document.querySelector('.sidebar');
             const main = document.querySelector('.main-content');
             sidebar.style.transition = "width 0.3s ease, opacity 0.3s ease";
@@ -275,7 +274,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById(id)?.addEventListener('input', calculateTotal);
     });
 
-    // Tự động tính toán ngay khi load trang (Cực kỳ quan trọng cho trang Edit)
+    // Tự động tính toán ngay khi load trang
     if (document.getElementById('electric_old')) {
         calculateTotal();
     }

@@ -2,8 +2,6 @@
 @inject IHttpContextAccessor HttpContextAccessor
 
 @{
-    // Hàm kiểm tra Path hiện tại để set class active
-    // Dùng ToLower() để tránh lỗi so sánh chữ hoa chữ thường giữa URL và code
     bool IsActive(string path)
     {
         var currentPath = HttpContextAccessor.HttpContext.Request.Path.Value?.ToLower() ?? "";

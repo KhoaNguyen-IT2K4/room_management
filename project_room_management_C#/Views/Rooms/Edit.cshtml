@@ -8,10 +8,8 @@
 <a asp-action="Index" class="returnPage"><i class="fa-solid fa-arrow-left"></i> Quay lại</a>
 
 <div class="nhapPhong">
-    @* asp-route-id sẽ truyền ID vào hàm Update trong Controller *@
     <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
 
-        @* Các trường ẩn để đảm bảo dữ liệu không bị mất khi Update *@
         <input type="hidden" asp-for="Id" />
         <input type="hidden" asp-for="RoomCode" />
 
@@ -43,7 +41,6 @@
         </div>
         <div>
             <lable>Trạng thái:</lable>
-            @* asp-for trên select sẽ tự động chọn option đúng, không cần @if nữa *@
             <select asp-for="Status" class="gioiTinh">
                 <option value="Trống">Trống</option>
                 <option value="Đã thuê">Đã thuê</option>

@@ -13,7 +13,6 @@ public class RoomsController : Controller
         _context = context;
     }
 
-    // GET: /Rooms/Index
     [HttpGet]
     public async Task<IActionResult> Index(string search, string status)
     {
@@ -39,20 +38,17 @@ public class RoomsController : Controller
         return View(rooms);
     }
 
-    // GET: /Rooms/Create
     public IActionResult Create()
     {
         return View();
     }
 
-    // POST: /Rooms/Store
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(Room room)
     {
         if (ModelState.IsValid)
         {
-            // Logic tạo mã phòng tự động: P001, P002...
             var lastRoom = await _context.Rooms
                 .OrderByDescending(r => r.RoomCode)
                 .FirstOrDefaultAsync();
@@ -60,14 +56,12 @@ public class RoomsController : Controller
             int number = 1;
             if (lastRoom != null && lastRoom.RoomCode.StartsWith("P"))
             {
-                // Cắt chuỗi lấy phần số (Laravel: substr($lastRoom->room_code, 1))
                 if (int.TryParse(lastRoom.RoomCode.Substring(1), out int lastNumber))
                 {
                     number = lastNumber + 1;
                 }
             }
 
-            // str_pad(number, 3, 0, STR_PAD_LEFT) -> number.ToString("D3")
             room.RoomCode = "P" + number.ToString("D3");
 
             _context.Add(room);
@@ -79,22 +73,19 @@ public class RoomsController : Controller
         return View(room);
     }
 
-    // GET: /Rooms/Edit/5
     public async Task<IActionResult> Edit(long id)
     {
-        // C# sẽ không còn phàn nàn về việc lệch kiểu dữ liệu nữa
         var room = await _context.Rooms.FindAsync(id);
         if (room == null) return NotFound();
 
         return View(room);
     }
 
-    // POST: /Rooms/Update/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(long id, Room room) // Sửa thành long id
+    public async Task<IActionResult> Edit(long id, Room room)
     {
-        if (id != room.Id) // Đảm bảo room.RoomId cũng là kiểu long trong Model
+        if (id != room.Id)
         {
             return NotFound();
         }
@@ -109,10 +100,9 @@ public class RoomsController : Controller
         return View(room);
     }
 
-    // POST: /Rooms/Delete/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Delete(long id) // Sửa thành long id
+    public async Task<IActionResult> Delete(long id)
     {
         var room = await _context.Rooms
             .Include(r => r.Contracts)

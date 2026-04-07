@@ -27,9 +27,7 @@
     <div class="listRoom" id="table-container">
         @await Html.PartialAsync("_PaymentTable", Model)
 
-        @* Phân trang: Thay thế {{ $rooms->links() }} *@
         <div class="d-flex justify-content-center mt-3">
-            @* Sau khi cài X.PagedList, dùng: @Html.PagedListPager(...) *@
         </div>
     </div>
 </div>

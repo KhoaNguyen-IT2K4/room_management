@@ -27,7 +27,6 @@
 
         <div>
             <label>Người thuê:</label>
-            @* Dùng name="tenant" để khớp với logic cũ hoặc dùng hidden input nếu cần lưu ID *@
             <select id="selectTenant" class="nguoiThue" required>
                 <option value="">-- Chọn người thuê --</option>
             </select>
@@ -35,7 +34,6 @@
 
         <div>
             <label>Tháng:</label>
-            @* ASP.NET sẽ bind giá trị month vào Bill.Month/Year ở hàm POST sau này *@
             <input type="month" name="monthYear" id="month_input" required>
         </div>
 
@@ -87,7 +85,6 @@
 
 @section Scripts {
     <script>
-        // Truyền dữ liệu từ C# sang một object toàn cục để file JS dùng chung
         window.RentalConfig = {
             electricPrice: @(ViewBag.Electric?.Price ?? 0),
             waterPrice: @(ViewBag.Water?.Price ?? 0)

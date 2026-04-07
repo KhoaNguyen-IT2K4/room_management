@@ -65,18 +65,15 @@ namespace project_room_management_C_.Controllers
 
         public async Task<IActionResult> Create()
         {
-            // Lấy phòng đã thuê
             var rooms = await _context.Rooms
                 .Where(r => r.Status == "Đã thuê")
                 .ToListAsync();
 
-            // Lấy thông tin dịch vụ điện/nước
             var electric = await _context.Services
                 .FirstOrDefaultAsync(s => s.ServiceName == "Điện");
             var water = await _context.Services
                 .FirstOrDefaultAsync(s => s.ServiceName == "Nước");
 
-            // Lấy thông tin các dịch vụ khác
             var fixedServices = await _context.Services
                 .Where(s => s.ServiceName != "Điện" && s.ServiceName != "Nước")
                 .ToListAsync();
@@ -93,7 +90,6 @@ namespace project_room_management_C_.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(long roomId, string monthYear, int electric_old, int electric_new, int water_old, int water_new)
         {
-            // 1. Kiểm tra null monthYear để tránh lỗi Split
             if (string.IsNullOrEmpty(monthYear))
             {
                 TempData["Error"] = "Vui lòng chọn tháng năm";
@@ -115,7 +111,6 @@ namespace project_room_management_C_.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            // 2. Tính toán (Ép kiểu decimal để chính xác)
             int electricUsed = electric_new - electric_old;
             int waterUsed = water_new - water_old;
 
@@ -148,10 +143,10 @@ namespace project_room_management_C_.Controllers
                         ServiceTotal = serviceTotal,
                         Total = total,
                         CreatedAt = DateTime.Now,
-                        Status = "Chưa thanh toán" // Nên có trạng thái mặc định
+                        Status = "Chưa thanh toán"
                     };
                     _context.Bills.Add(bill);
-                    await _context.SaveChangesAsync(); // Lưu Bill trước để lấy ID
+                    await _context.SaveChangesAsync();
 
                     var details = new List<BillDetail> {
                         new BillDetail {
@@ -207,7 +202,6 @@ namespace project_room_management_C_.Controllers
 
         public async Task<IActionResult> Edit(long id)
         {
-            // 1. Lấy hóa đơn kèm chi tiết và thông tin phòng
             var bill = await _context.Bills
                 .Include(b => b.Room)
                 .Include(b => b.BillDetails)
@@ -216,15 +210,12 @@ namespace project_room_management_C_.Controllers
 
             if (bill == null) return NotFound();
 
-            // 2. Lấy đơn giá điện/nước
             var electricService = await _context.Services.FirstOrDefaultAsync(s => s.ServiceName == "Điện");
             var waterService = await _context.Services.FirstOrDefaultAsync(s => s.ServiceName == "Nước");
 
-            // 3. Bóc tách chi tiết
             var electricDetail = bill.BillDetails.FirstOrDefault(d => d.ServiceId == electricService?.Id);
             var waterDetail = bill.BillDetails.FirstOrDefault(d => d.ServiceId == waterService?.Id);
 
-            // Lấy thông tin các dịch vụ khác
             var fixedServices = await _context.Services
                 .Where(s => s.ServiceName != "Điện" && s.ServiceName != "Nước")
                 .ToListAsync();
@@ -240,7 +231,6 @@ namespace project_room_management_C_.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(long id, string monthYear, int electric_old, int electric_new, int water_old, int water_new)
         {
-            // Load Bill kèm theo Details để Update
             var bill = await _context.Bills
                 .Include(b => b.BillDetails)
                 .FirstOrDefaultAsync(b => b.Id == id);
@@ -254,7 +244,6 @@ namespace project_room_management_C_.Controllers
             var electric = await _context.Services.FirstOrDefaultAsync(s => s.ServiceName == "Điện");
             var water = await _context.Services.FirstOrDefaultAsync(s => s.ServiceName == "Nước");
 
-            // Tính toán lại toàn bộ
             int eUsed = electric_new - electric_old;
             int wUsed = water_new - water_old;
             decimal eTotal = (decimal)eUsed * (electric?.Price ?? 0);
@@ -276,18 +265,16 @@ namespace project_room_management_C_.Controllers
                     bill.Total = (bill.RoomPrice ?? 0) + sTotal;
                     bill.UpdatedAt = DateTime.Now;
 
-                    // Cập nhật Chi tiết Điện
                     var eDetail = bill.BillDetails.FirstOrDefault(d => d.ServiceId == electric?.Id);
                     if (eDetail != null)
                     {
                         eDetail.OldIndex = electric_old;
                         eDetail.NewIndex = electric_new;
                         eDetail.Quantity = eUsed;
-                        eDetail.Price = electric?.Price; // Cập nhật cả đơn giá mới nếu cần
+                        eDetail.Price = electric?.Price;
                         eDetail.Total = eTotal;
                     }
 
-                    // Cập nhật Chi tiết Nước
                     var wDetail = bill.BillDetails.FirstOrDefault(d => d.ServiceId == water?.Id);
                     if (wDetail != null)
                     {
@@ -365,7 +352,7 @@ namespace project_room_management_C_.Controllers
                 .Include(c => c.Tenant)
                 .Include(c => c.Room)
                 .Where(c => c.RoomId == roomId)
-                .OrderByDescending(c => c.StartDay) // Laravel là start_day
+                .OrderByDescending(c => c.StartDay)
                 .FirstOrDefaultAsync();
 
             if (contract == null)

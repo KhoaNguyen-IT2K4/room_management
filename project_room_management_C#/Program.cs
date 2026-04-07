@@ -12,7 +12,7 @@ builder.Services.AddDbContext<RoomManagementContext>(options =>
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Authenticate/ShowLogin"; // Đường dẫn trang đăng nhập
+        options.LoginPath = "/Authenticate/ShowLogin";
         options.LogoutPath = "/Authenticate/Logout";
         options.AccessDeniedPath = "/Authenticate/AccessDenied";
     });

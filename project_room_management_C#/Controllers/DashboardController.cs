@@ -17,29 +17,25 @@ namespace project_room_management_C_.Controllers
 
         public async Task<IActionResult> Index()
         {
+            await AutoCheckExpiredContracts();
+
             var today = DateOnly.FromDateTime(DateTime.Now);
             var nextSevenDays = today.AddDays(7);
 
             var viewModel = new DashboardViewModel
             {
-                // Room::count()
                 TotalRooms = await _context.Rooms.CountAsync(),
 
-                // Room::where('status', 'Đã thuê')->count()
                 RentedRooms = await _context.Rooms.CountAsync(r => r.Status == "Đã thuê"),
 
-                // Room::where('status', 'Trống')->count()
                 EmptyRooms = await _context.Rooms.CountAsync(r => r.Status == "Trống"),
 
-                // Tenant::count()
                 TotalTenants = await _context.Tenants.CountAsync(),
 
-                // Room::where('status', 'Trống')->get()
                 AvailableRooms = await _context.Rooms
                     .Where(r => r.Status == "Trống")
                     .ToListAsync(),
 
-                // Contract::where('status', 'Còn hạn')->whereBetween(...)
                 ExpiringContracts = await _context.Contracts
                     .Where(c => c.Status == "Còn hạn"
                              && c.EndDay.HasValue
@@ -49,6 +45,29 @@ namespace project_room_management_C_.Controllers
             };
 
             return View(viewModel);
+        }
+
+        private async Task AutoCheckExpiredContracts()
+        {
+            DateOnly today = DateOnly.FromDateTime(DateTime.Now);
+
+            var expiredContracts = await _context.Contracts
+                .Include(c => c.Room)
+                .Where(c => c.Status == "Còn hạn" && c.EndDay.HasValue && c.EndDay.Value < today)
+                .ToListAsync();
+
+            if(expiredContracts.Any())
+            {
+                foreach(var contract in expiredContracts)
+                {
+                    contract.Status = "Hết hạn";
+                    if(contract.Room != null)
+                    {
+                        contract.Room.Status = "Trống";
+                    }    
+                }
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

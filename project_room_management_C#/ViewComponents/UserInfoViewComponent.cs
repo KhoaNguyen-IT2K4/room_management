@@ -10,12 +10,10 @@ public class UserInfoViewComponent : ViewComponent
 
     public async Task<IViewComponentResult> InvokeAsync()
     {
-        // Lấy ID người dùng từ Claims (vẫn cần ID để tìm trong DB)
         var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         if (string.IsNullOrEmpty(userId)) return Content("");
 
-        // Lấy dữ liệu mới nhất từ Database
         var user = await _context.Users.FindAsync(long.Parse(userId));
 
         return View(user);

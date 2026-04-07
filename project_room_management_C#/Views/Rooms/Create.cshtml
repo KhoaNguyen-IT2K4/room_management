@@ -8,12 +8,10 @@
 <a asp-action="Index" class="returnPage"><i class="fa-solid fa-arrow-left"></i> Quay lại</a>
 
 <div class="nhapPhong">
-    @* asp-action="Store" sẽ tự động tạo route và Anti-Forgery Token *@
     <form asp-action="Create" method="post">
         <h2>Thêm phòng mới</h2>
 
         <div>
-            @* Giữ nguyên <lable> để ăn khớp với CSS cũ của bạn *@
             <lable>Tên phòng:</lable>
             <input type="text" asp-for="RoomName" placeholder="Tên phòng..." required>
         </div>

@@ -31,7 +31,6 @@ namespace project_room_management_C_.Controllers
 
             if (user != null && BCrypt.Net.BCrypt.Verify(password, user.Password))
             {
-                // TẠO DANH SÁCH QUYỀN HẠN (CLAIMS)
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, user.Name),
@@ -42,7 +41,6 @@ namespace project_room_management_C_.Controllers
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-                // Ghi Cookie vào trình duyệt
                 await HttpContext.SignInAsync(
                     CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(claimsIdentity)
@@ -57,11 +55,9 @@ namespace project_room_management_C_.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken] // Bảo mật giống Laravel
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
-            // Sử dụng CookieAuthenticationDefaults.AuthenticationScheme 
-            // để đảm bảo khớp 100% với cấu hình trong Program.cs
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
             return RedirectToAction("ShowLogin", "Authenticate");

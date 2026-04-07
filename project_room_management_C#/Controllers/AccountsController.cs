@@ -19,10 +19,8 @@ namespace project_room_management_C_.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(string search, string role)
         {
-            // Lấy Username của người đang đăng nhập (luôn là chuỗi)
             var currentUserName = User.Identity.Name;
 
-            // Lọc: Lấy những người có UserName KHÁC với người đang đăng nhập
             var query = _context.Users
                 .Where(u => u.Name != currentUserName)
                 .AsQueryable();
@@ -122,8 +120,7 @@ namespace project_room_management_C_.Controllers
             {
                 user.Password = accountInDb.Password;
 
-                // Xóa tất cả các lỗi liên quan đến mật khẩu để IsValid thành true
-                ModelState.Remove("OldPassword"); // Thêm dòng này
+                ModelState.Remove("OldPassword");
                 ModelState.Remove("Password");
                 ModelState.Remove("ConfirmPassword");
             }    

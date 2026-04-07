@@ -25,7 +25,6 @@
                     <td>@(stt++)</td>
                     <td>@room.RoomCode</td>
                     <td>@room.RoomName</td>
-                    @* number_format($room->price) -> {0:N0} *@
                     <td>@string.Format("{0:N0}", room.Price) VNĐ</td>
                     <td>@room.Area m²</td>
                     <td>
@@ -39,7 +38,6 @@
                         }
                     </td>
                     <td class="editOrDel">
-                        @* Laravel: route('room.edit', $room->id) *@
                         <a asp-action="Edit" asp-route-id="@room.Id" class="edit">
                             <i class="fa-solid fa-pen"></i>
                         </a>

@@ -37,7 +37,6 @@
             <lable>Xác nhận mật khẩu:</lable>
             <input type="password" asp-for="ConfirmPassword" id="UCPW" placeholder="Nhập lại mật khẩu...">
             <i class="fa-solid fa-eye" style="top: 25%;" onclick="showPass('UCPW', this)"></i>
-            @* (Tùy chọn) Thêm dòng này để hiện thông báo nếu mật khẩu không khớp *@
             <span asp-validation-for="ConfirmPassword" style="color:red"></span>
         </div>
         <div>

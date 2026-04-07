@@ -184,6 +184,24 @@ namespace project_room_management_C_.Controllers
                     newRoom.Status = "Đã thuê";
                 }
 
+                if(currentContract.Status != contract.Status)
+                {
+                    if(contract.Status == "Còn hạn")
+                    {
+                        if (currentContract.Room != null)
+                        {
+                            currentContract.Room.Status = "Đã thuê";
+                        }
+                    }    
+                    else
+                    {
+                        if (currentContract.Room != null)
+                        {
+                            currentContract.Room.Status = "Trống";
+                        }
+                    }    
+                }    
+
                 currentContract.TenantId = contract.TenantId;
                 currentContract.RoomId = contract.RoomId;
                 currentContract.StartDay = contract.StartDay;
