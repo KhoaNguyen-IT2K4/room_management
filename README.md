@@ -1,3 +1,4 @@
+[![.NET Core CI](https://github.com/KhoaNguyen-IT2K4/room_management/actions/workflows/dotnet-ci.yml/badge.svg)](https://github.com/KhoaNguyen-IT2K4/room_management/actions/workflows/dotnet-ci.yml)
 # Hệ thống Quản lý Phòng trọ (ASP.NET Core 8 MVC)
 
 ## Giới thiệu
