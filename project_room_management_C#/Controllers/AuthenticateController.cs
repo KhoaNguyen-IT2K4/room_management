@@ -5,16 +5,21 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using project_room_management_C_.Models;
 using BCrypt.Net;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 
 namespace project_room_management_C_.Controllers
 {
     public class AuthenticateController : Controller
     {
         private readonly RoomManagementContext _context;
+        private readonly IConfiguration _configuration;
 
-        public AuthenticateController(RoomManagementContext context)
+        public AuthenticateController(RoomManagementContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
 
         [HttpGet]
@@ -31,6 +36,8 @@ namespace project_room_management_C_.Controllers
 
             if (user != null && BCrypt.Net.BCrypt.Verify(password, user.Password))
             {
+                var userRole = user.Role.ToString().ToLower();
+
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, user.Name),
@@ -46,12 +53,33 @@ namespace project_room_management_C_.Controllers
                     new ClaimsPrincipal(claimsIdentity)
                 );
 
+                var jwtToken = GenerateJWTToken(claims);
+
+                System.Diagnostics.Debug.WriteLine($"JWT Token: {jwtToken}");
+
                 TempData["Success"] = $"Xin chào <b>{user.Name}</b>";
                 return RedirectToAction("Index", "Dashboard");
             }
 
             TempData["Error"] = "Sai tài khoản hoặc mật khẩu";
             return RedirectToAction("ShowLogin");
+        }
+
+        private string GenerateJWTToken(List<Claim> claims)
+        {
+            var jwtKey = _configuration["Jwt:Key"];
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                issuer: _configuration["Jwt:Issuer"],
+                audience: _configuration["Jwt:Audience"],
+                claims: claims,
+                expires: DateTime.Now.AddDays(1),
+                signingCredentials: creds
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
         [HttpPost]
